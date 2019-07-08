@@ -35,6 +35,7 @@ References:
 //so to perform reading at correct time
 //280 - (1/FCPU/ADCprescaler)*13*1000000   , 1000000 is the conversion factor from s to us
 // es. 280 - 104 = 176
+//TU JEST BLAD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #define GP2Y1010AU0F_SAMPLEDELAYUS 176
 //from datasheet 320us - 280us
 #define GP2Y1010AU0F_SAMPLEENDDELAYUS 40
