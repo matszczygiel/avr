@@ -2,7 +2,7 @@
 #define NEW_ADC_H
 
 #define ADC_REF_VOLTAGE 5.0
-
+#define ADC_CONVERSION_TIME_US 104  // (13 / ADC_clock)
 
 void adc_init();
 
