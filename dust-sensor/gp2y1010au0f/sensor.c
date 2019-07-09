@@ -1,35 +1,40 @@
 #include "sensor.h"
 
+#include <util/delay.h>
+#include <avr/io.h>
+
 #include "../adc/new_adc.h"
 
-void sensor_init() {
-    SENSOR_IRLED_DDR |= (1 << SENSOR_IRLED_PIN);  //set IR led pin as output
+void sensor_init()
+{
+    SENSOR_IRLED_DDR |= (1 << SENSOR_IRLED_PIN); // set IR led pin as output
 }
 
-float sensor_compute_dust_concentration(float voltage) {
-    const float A = 0.172;
-    const float B = -0.0999;
-    float ret     = A * voltage + B;
-    if (ret < 0)
-        ret = 0;
+double sensor_compute_dust_concentration(double voltage)
+{
+    const double A = 0.172;
+    const double B = -0.0999;
+    double ret = A * voltage + B;
+    if (ret < 0.0)
+        ret = 0.0;
     else if (ret > 0.5)
         ret = 0.5;
-    ret *= 1000;  //to micrograms
+    ret *= 1000; // to micrograms
     return ret;
 }
 
-float sensor_read_voltage() {
-    float vtot  = 0.0;
+double sensor_read_voltage()
+{
+    double vtot = 0.0;
 
-    for (int i = 0; i < SENSOR_SAMPLES; ++i) {
-        SENSOR_IRLED_PORT &= ~(1 << SENSOR_IRLED_PIN);                 //turn off IR led
-        _delay_us(SENSOR_SAMPLING_DELAY_US - ADC_CONVERSION_TIME_US);  //delay
-        float volt = adc_read_voltage();                                   //read the dust value
-        vtot += volt;
-        _delay_us(GP2Y1010AU0F_SAMPLEENDDELAYUS);                    //delay
-        GP2Y1010AU0F_LEDOUT_PORT |= (1 << GP2Y1010AU0F_LEDOUT_PIN);  //on, power led off
-        _delay_us(GP2Y1010AU0F_PAUSEDELAYUS);                        //delay
-        _delay_ms(GP2Y1010AU0F_PAUSEDELAYMS);                        //correction delay
+    for (int i = 0; i < SENSOR_SAMPLES; ++i)
+    {
+        SENSOR_IRLED_PORT &= ~(1 << SENSOR_IRLED_PIN);                  // turn off IR led
+        _delay_us((SENSOR_SAMPLING_DELAY_US - ADC_CONVERSION_TIME_US)); // delay
+        vtot += adc_read_voltage();                                     // read the dust value
+        _delay_us((SENSOR_PULSE_WIDTH_US - SENSOR_SAMPLING_DELAY_US));  // wait until end of pulse
+        SENSOR_IRLED_PORT |= (1 << SENSOR_IRLED_PIN);                   // turn off IR led
+        _delay_ms(SENSOR_CYCLE_MS);                                     // wait until reading cycle completes
     }
-    dustadclast = dustadctot / GP2Y1010AU0F_SAMPLES;
+    return (vtot / SENSOR_SAMPLES);
 }

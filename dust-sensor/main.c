@@ -1,28 +1,23 @@
-#include "adc/adc.h"
-#include "gp2y1010au0f/gp2y1010au0f.h"
+
+//#include "adc/adc.h"
+//#include "gp2y1010au0f/gp2y1010au0f.h"
+
 #include "led-disp/leddisp.h"
 
+#include "adc/new_adc.h"
+#include "gp2y1010au0f/sensor.h"
 
-int main(void) {
-	//init adc
-	adc_init();
+int main(void)
+{
+	adc_init();	//initialize ADC
+	sensor_init(); //initialize sensor
+	led_init();	//initialize led display
 
-	//init interrupt
-	sei();
+	while (1)
+	{
 
-	//init gp2y1010au0f
-	gp2y1010au0f_init();
-
-	led_init();
-
-	for (;;) {
-		//get dust value
-		int dust = (int) gp2y1010au0f_getdust();
-
-	//	int dustint = dust * 1000;
-		led_display_for(dust, 1000);
-
+		double volt = sensor_read_voltage(); //read voltage from the dust sensor
+		int dust = sensor_compute_dust_concentration(volt);
+		led_display_for(123, 500);
 	}
-	
-	return 0;
 }
