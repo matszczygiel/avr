@@ -21,19 +21,18 @@ const char led_seg[] = {0b00000001,
 
 void led_display_for(int val, int miliseconds)
 {
+    if ((val > 9999) | (val < 0))
+        return;
     int turns = miliseconds / 4;
     int temp, num;
 
-    LED_SEGMENT_PORT |= 0x0F;
 
     for (int i = 0; i < turns; ++i)
     {
         num = val;
         temp = num / 1000;
         num = num % 1000;
-        if (temp > 9 | temp < 0)
-            return;
-
+        LED_SEGMENT_PORT |= 0x0F;
         LED_SEGMENT_PORT &= ~led_seg[0];
         LED_DIGITS_PORT = led_digit[temp];
         _delay_ms(1);
@@ -48,6 +47,7 @@ void led_display_for(int val, int miliseconds)
         LED_SEGMENT_PORT &= ~0x0F;
 
         temp = num / 10;
+        num = num % 10;
         LED_SEGMENT_PORT |= 0x0F;
         LED_SEGMENT_PORT &= ~led_seg[2];
         LED_DIGITS_PORT = led_digit[temp];
@@ -55,7 +55,7 @@ void led_display_for(int val, int miliseconds)
 
         LED_SEGMENT_PORT &= ~0x0F;
 
-        temp = num % 10;
+        temp = num;
         LED_SEGMENT_PORT |= 0x0F;
         LED_SEGMENT_PORT &= ~led_seg[3];
         LED_DIGITS_PORT = led_digit[temp];

@@ -8,6 +8,7 @@
 void sensor_init()
 {
     SENSOR_IRLED_DDR |= (1 << SENSOR_IRLED_PIN); // set IR led pin as output
+    SENSOR_IRLED_PORT |= (1 << SENSOR_IRLED_PIN); //turn IR led off
 }
 
 double sensor_compute_dust_concentration(double voltage)
@@ -29,7 +30,7 @@ double sensor_read_voltage()
 
     for (int i = 0; i < SENSOR_SAMPLES; ++i)
     {
-        SENSOR_IRLED_PORT &= ~(1 << SENSOR_IRLED_PIN);                  // turn off IR led
+        SENSOR_IRLED_PORT &= ~(1 << SENSOR_IRLED_PIN);                  // turn on IR led
         _delay_us((SENSOR_SAMPLING_DELAY_US - ADC_CONVERSION_TIME_US)); // delay
         vtot += adc_read_voltage();                                     // read the dust value
         _delay_us((SENSOR_PULSE_WIDTH_US - SENSOR_SAMPLING_DELAY_US));  // wait until end of pulse
