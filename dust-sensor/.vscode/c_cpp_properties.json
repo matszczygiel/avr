@@ -4,7 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/lib/gcc/avr/5.4.0/include/**"
+                "/usr/lib/avr/include/"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/avr-gcc",

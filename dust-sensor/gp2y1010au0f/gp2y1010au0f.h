@@ -20,7 +20,7 @@ References:
 #define GP2Y1010AU0F_LEDOUT_PIN PD7
 
 //define in led channel
-#define GP2Y1010AU0F_LEDIN_CHANNEL 4
+#define GP2Y1010AU0F_LEDIN_CHANNEL 5
 
 //define slop and intercept to convert values
 //derived using linear interpolation on datasheet fig 3.

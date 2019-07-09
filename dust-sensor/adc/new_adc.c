@@ -25,5 +25,5 @@ uint8_t adc_read_bits()
 float adc_read_voltage()
 {
     float adc_res = adc_read_bits();
-    return adc_res * ADC_REF_VOLTAGE / 1024.0;
+    return adc_res * ADC_REF_VOLTAGE / 1024.0; //rescale from reference voltage (from Atmega8 datasheet)
 }
