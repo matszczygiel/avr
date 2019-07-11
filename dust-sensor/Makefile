@@ -4,7 +4,7 @@ CC=avr-gcc
 OBJCOPY=avr-objcopy
 CFLAGS= -Wall -Os -mmcu=${MCU} -DF_CPU=${F_CPU}
 TARGET=main
-SRCS=main.c led-disp/leddisp.c adc/new_adc.c gp2y1010au0f/sensor.c
+SRCS=main.c led-disp/leddisp.c adc/adc.c sensor/sensor.c
 
 all:
 		${CC} ${CFLAGS} -o ${TARGET}.bin ${SRCS}

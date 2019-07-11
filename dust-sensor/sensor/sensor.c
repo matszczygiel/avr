@@ -3,7 +3,7 @@
 #include <util/delay.h>
 #include <avr/io.h>
 
-#include "../adc/new_adc.h"
+#include "../adc/adc.h"
 
 void sensor_init()
 {

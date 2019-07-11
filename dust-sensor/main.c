@@ -1,11 +1,7 @@
 
-//#include "adc/adc.h"
-//#include "gp2y1010au0f/gp2y1010au0f.h"
-
 #include "led-disp/leddisp.h"
-
-#include "adc/new_adc.h"
-#include "gp2y1010au0f/sensor.h"
+#include "adc/adc.h"
+#include "sensor/sensor.h"
 
 int main(void)
 {
