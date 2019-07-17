@@ -12,7 +12,7 @@ int main(void)
 	while (1)
 	{
 		double volt = sensor_read_voltage(); //read voltage from the dust sensor
-		int dust = sensor_compute_dust_concentration(volt);
-		led_display_for(dust, 500);
+		double dust = sensor_compute_dust_concentration(volt);
+		led_display_for(dust, 500, 1);
 	}
 }

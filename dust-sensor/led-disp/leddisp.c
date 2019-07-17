@@ -19,47 +19,72 @@ const char led_seg[] = {0b00000001,
                         0b00000100,
                         0b00001000};
 
-void led_display_for(int val, int miliseconds)
+void led_display_for(double value, int miliseconds, int dot_position_from_right)
 {
-    if ((val > 9999) | (val < 0))
+    if (dot_position_from_right > 3 || dot_position_from_right < 0)
         return;
-    int turns = miliseconds / 4;
-    int temp, num;
 
-
-    for (int i = 0; i < turns; ++i)
+    for (int i = 0; i < dot_position_from_right; ++i)
     {
-        num = val;
-        temp = num / 1000;
-        num = num % 1000;
-        LED_SEGMENT_PORT |= 0x0F;
-        LED_SEGMENT_PORT &= ~led_seg[0];
-        LED_DIGITS_PORT = led_digit[temp];
-        _delay_ms(1);
+        value *= 10;
+    }
 
-        temp = num / 100;
-        num = num % 100;
-        LED_SEGMENT_PORT |= 0x0F;
-        LED_SEGMENT_PORT &= ~led_seg[1];
-        LED_DIGITS_PORT = led_digit[temp];
-        _delay_ms(1);
+    int val = value;
 
-        LED_SEGMENT_PORT &= ~0x0F;
+    if ((val > 9999) | (val < 0))
+    {
+        for (int i = 0; i < miliseconds; ++i)
+        {
+            LED_SEGMENT_PORT &= ~0x0F;
+            LED_DIGITS_PORT = LED_MINUS;
+            _delay_ms(1);
+        }
+    }
+    else
+    {
+        int turns = miliseconds / 4;
+        int temp, num;
 
-        temp = num / 10;
-        num = num % 10;
-        LED_SEGMENT_PORT |= 0x0F;
-        LED_SEGMENT_PORT &= ~led_seg[2];
-        LED_DIGITS_PORT = led_digit[temp];
-        _delay_ms(1);
+        for (int i = 0; i < turns; ++i)
+        {
+            num = val;
+            temp = num / 1000;
+            num = num % 1000;
+            LED_SEGMENT_PORT |= 0x0F;
+            LED_SEGMENT_PORT &= ~led_seg[0];
+            LED_DIGITS_PORT = led_digit[temp];
+            if (dot_position_from_right == 3)
+                LED_DIGITS_PORT |= LED_DOT;
+            _delay_ms(1);
 
-        LED_SEGMENT_PORT &= ~0x0F;
+            temp = num / 100;
+            num = num % 100;
+            LED_SEGMENT_PORT |= 0x0F;
+            LED_SEGMENT_PORT &= ~led_seg[1];
+            LED_DIGITS_PORT = led_digit[temp];
+            if (dot_position_from_right == 2)
+                LED_DIGITS_PORT |= LED_DOT;
+            _delay_ms(1);
 
-        temp = num;
-        LED_SEGMENT_PORT |= 0x0F;
-        LED_SEGMENT_PORT &= ~led_seg[3];
-        LED_DIGITS_PORT = led_digit[temp];
-        _delay_ms(1);
+            LED_SEGMENT_PORT &= ~0x0F;
+
+            temp = num / 10;
+            num = num % 10;
+            LED_SEGMENT_PORT |= 0x0F;
+            LED_SEGMENT_PORT &= ~led_seg[2];
+            LED_DIGITS_PORT = led_digit[temp];
+            if (dot_position_from_right == 1)
+                LED_DIGITS_PORT |= LED_DOT;
+            _delay_ms(1);
+
+            LED_SEGMENT_PORT &= ~0x0F;
+
+            temp = num;
+            LED_SEGMENT_PORT |= 0x0F;
+            LED_SEGMENT_PORT &= ~led_seg[3];
+            LED_DIGITS_PORT = led_digit[temp];
+            _delay_ms(1);
+        }
     }
 
     LED_SEGMENT_PORT |= 0x0F;

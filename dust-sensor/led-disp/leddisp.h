@@ -9,12 +9,13 @@
 #define LED_SEGMENT_PORT PORTD
 
 #define LED_DOT 0b10000000
+#define LED_MINUS 0b01000000;
 
 const char led_digit[10];
 
 const char led_seg[4];
 
-void led_display_for(int val, int miliseconds);
+void led_display_for(double value, int miliseconds, int dot_position_from_right);
 void led_init();
 
 #endif
